@@ -123,3 +123,9 @@ export const LLms = atom<LLmStore>({
     default: Loadable.unloaded(),
 })
 
+type LLm = TAgentApi.LLm | null;
+
+export const selectedLlmState = atom<LLm>({
+    key: 'selectedLlmState',
+    default: null,
+});

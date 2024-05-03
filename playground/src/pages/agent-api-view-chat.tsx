@@ -7,10 +7,14 @@ import { useEffect, useState } from "react"
 import { AIAgentChatConnections } from "./agent-api-chat-connections"
 import { useAgentApiConversation } from "../apis/agent-api/hooks/useConversations"
 import { useAgentConversationMetadata, useResetAgentConversationMetadata } from "../apis/agent-api/hooks/useMetadata"
+import { useRecoilValue } from "recoil"
+import { selectedLlmState } from "../apis/agent-api/state"
 
 export function AIAgentViewChat () {
     
     const {chatId} = useParams()
+    
+    const selectedLlm = useRecoilValue(selectedLlmState);
 
 
     const conversationObject = useAgentApiConversation(chatId)
@@ -38,7 +42,8 @@ export function AIAgentViewChat () {
     return (
         <Flex>
             <View width={900}>
-                <Container heading={`Chatting with '${agentObject.value.name}'`} minHeight={500} padBody={0}>
+                <h1 style={{textAlign: 'center'}}>Chatting with {selectedLlm?.name}</h1>
+                <Container heading={`Etapa: '${agentObject.value.name}'`} minHeight={500} padBody={0}>
                     <ChatRendered/>
                 </Container>  
                 <Card>
