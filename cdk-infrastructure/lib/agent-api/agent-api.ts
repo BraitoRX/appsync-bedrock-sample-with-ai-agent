@@ -16,6 +16,7 @@ interface AgentApiProps {
         actionTable: dynamodb.ITable;
         conversationTable: dynamodb.ITable;
         eventTable: dynamodb.ITable;
+        LLmTable: dynamodb.ITable;
     }
 }
 
@@ -45,6 +46,7 @@ export function buildAgentApi (scope: Construct, props: AgentApiProps) {
 
     // We add the data sources for tables to this api
     const agentTableDS = appsyncApi.addDynamoDbDataSource('AgentTable', props.tables.agentTable)
+    const LLMTableDS = appsyncApi.addDynamoDbDataSource('LLMTable', props.tables.LLmTable)
     const actionTableDS = appsyncApi.addDynamoDbDataSource('ActionTable', props.tables.actionTable)
     const conversationTableDS = appsyncApi.addDynamoDbDataSource('ConversationTable', props.tables.conversationTable)
     const eventsTableDS = appsyncApi.addDynamoDbDataSource('EventsTable', props.tables.eventTable)
@@ -69,6 +71,13 @@ export function buildAgentApi (scope: Construct, props: AgentApiProps) {
     addJsResolver(scope, appsyncApi, 'Query.getAgent', { code: 'get',  dataSource: agentTableDS})
     addJsResolver(scope, appsyncApi, 'Query.listAgents', { code: 'scan', dataSource: agentTableDS })
 
+    // READ on LLMs
+    addJsResolver(scope, appsyncApi, 'Query.getLLm', { code: 'get',  dataSource: LLMTableDS})
+    addJsResolver(scope, appsyncApi, 'Query.listLLms', { code: 'scan', dataSource: LLMTableDS })
+    // CRUD on LLMs
+    addJsResolver(scope, appsyncApi, 'Mutation.createLLm', { code: 'create', dataSource: LLMTableDS })
+    addJsResolver(scope, appsyncApi, 'Mutation.deleteLLm', { code: 'delete', dataSource: LLMTableDS })
+    
     // READ on actions
     addJsResolver(scope, appsyncApi, 'Query.getAction', { code: 'get',  dataSource: actionTableDS})
     addJsResolver(scope, appsyncApi, 'Query.listActions', { code: 'scan', dataSource: actionTableDS })

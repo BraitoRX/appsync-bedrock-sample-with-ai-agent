@@ -30,6 +30,12 @@ export interface Agent {
     actions: Action[]
 }
 
+export interface LLm {
+    id: string
+    name: string
+    model: string
+}
+
 export interface Action {
     id: string
     type: string,

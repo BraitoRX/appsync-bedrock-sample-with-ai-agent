@@ -40,6 +40,13 @@ export function buildTables (scope: Construct) {
 			type: dynamodb.AttributeType.STRING
 		}
 	})
+	// LLm table - for the list of events, each conversation owning a collection of these
+	const LLmTable = new dynamodb.Table(scope, 'MyLLmsDDBTable', {
+		partitionKey: {
+			name: 'id',
+			type: dynamodb.AttributeType.STRING
+		},
+	})
 
 	// Export the values
 
@@ -47,12 +54,14 @@ export function buildTables (scope: Construct) {
 	new cdk.CfnOutput(scope, 'actions-table', { exportName: 'actions-table', value: actionTable.tableName })
 	new cdk.CfnOutput(scope, 'conversations-table', { exportName: 'conversations-table', value: conversationTable.tableName })
 	new cdk.CfnOutput(scope, 'events-table', { exportName: 'events-table', value: eventTable.tableName })
+	new cdk.CfnOutput(scope, 'LLm-table', { exportName: 'LLm-table', value: LLmTable.tableName })
 
 	// Expose tables to other constructs that need to be build
 	return {
 		agentTable,
 		actionTable,
 		conversationTable,
-		eventTable
+		eventTable,
+		LLmTable
 	}
 }

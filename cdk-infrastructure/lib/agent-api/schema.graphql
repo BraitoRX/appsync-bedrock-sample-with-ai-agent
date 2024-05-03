@@ -1,3 +1,9 @@
+type LLm @aws_iam @aws_cognito_user_pools {
+    id: String!
+    name: String!
+    model: String!
+}
+
 type ConversationEvent @aws_iam @aws_cognito_user_pools {
     id: String!
     timestamp: String!
@@ -80,6 +86,12 @@ input NewAgent {
     systemPrompt: String!
     actions: [String!]!
 }
+
+input NewLLm {
+    name: String!
+    model: String!
+}
+
 input NewAction {
     type: String!,
     name: String!,
@@ -89,6 +101,8 @@ input NewAction {
 type Query @aws_cognito_user_pools {
     getAgent(id: ID): Agent!
     listAgents: [Agent]!
+    getLLm(id: ID): LLm!
+    listLLms: [LLm]!
     getAction(id: ID): Action!
     listActions: [Action]!
     getConversation(id: ID): Conversation!
@@ -102,6 +116,8 @@ type Mutation {
     deleteAction(id: ID): Action! @aws_cognito_user_pools
     createConversation(config: NewConversation): Conversation! @aws_cognito_user_pools
     deleteConversation(id: ID): Conversation! @aws_cognito_user_pools
+    createLLm(config: NewLLm!): LLm! @aws_cognito_user_pools
+    deleteLLm(id: ID): LLm! @aws_cognito_user_pools
 
     # User side operations
     userPublishMessage(conversationId: ID, event: UserAction!): ConversationEvent! @aws_cognito_user_pools

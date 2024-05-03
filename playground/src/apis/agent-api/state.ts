@@ -116,4 +116,10 @@ export const Actions = atom<ActionStore>({
     default: Loadable.unloaded(),
 })
 
+type LLmStore = Loadable<ObjRecord<TAgentApi.LLm>>
+
+export const LLms = atom<LLmStore>({
+    key: 'AgentApiLLms',
+    default: Loadable.unloaded(),
+})
 

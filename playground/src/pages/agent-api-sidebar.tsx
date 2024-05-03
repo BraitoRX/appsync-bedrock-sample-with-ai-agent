@@ -1,17 +1,23 @@
 import { AgentApiConversationListed } from "../library/chat/conversation-listed"
 import { Outlet, useNavigate } from "react-router-dom"
-import { useAgentApiAgentList, useAgentApiConversationList } from "../apis/agent-api"
+import { useAgentApiAgentList, useAgentApiConversationList, useLLmList } from "../apis/agent-api"
 import { Button, Flex, Loader, View } from "@aws-amplify/ui-react"
 import { Container } from "../library/container"
+import { Combobox } from "react-widgets/cjs"
+import { useState } from "react"
+import { LLm } from '../apis/agent-api/types';
+import "react-widgets/scss/styles.scss";
 
 export function AIAgentSidebar () {
     
     const conversationsObject = useAgentApiConversationList()
     const agentObjectList = useAgentApiAgentList()
+    const LLmsObject = useLLmList()
+    const [selectedLlm, setSelectedLlm] = useState<string | LLm | null>(null);
 
     const nav = useNavigate()
 
-    if (conversationsObject.isUnloaded() || !conversationsObject.value || agentObjectList.isUnloaded() || !agentObjectList.value) {
+    if (conversationsObject.isUnloaded() || !conversationsObject.value || agentObjectList.isUnloaded() || !agentObjectList.value || LLmsObject.isUnloaded() || !LLmsObject.value) {
         return <Loader/>
     }
     
@@ -24,9 +30,17 @@ export function AIAgentSidebar () {
                 key={conversation.id}/>
         )    
 
+        console.log(LLmsObject.value?.items())
+
     return (
         <View>
             <View className="sidebar">
+            <Combobox
+                data={LLmsObject.value?.items()}
+                textField="name"
+                onChange={(value) => setSelectedLlm(value)}
+                value={selectedLlm}
+                />
                 <Container heading="Your Conversations">
                     <Flex direction='column' gap={10} maxHeight={'calc(100vh - 150px)'} overflow='auto'>
                         {conversationsRendered}
