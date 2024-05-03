@@ -11,12 +11,17 @@ import { useAgentConversationMetadata, useResetAgentConversationMetadata } from 
 export function AIAgentViewChat () {
     
     const {chatId} = useParams()
+
+
     const conversationObject = useAgentApiConversation(chatId)
     const agentObject = useAgentApiAgent(conversationObject.value?.agent)
+
+
     const [chatString, setChatString] = useState<string>()
     const conversationMetadata = useAgentConversationMetadata()
     const resetMetadata = useResetAgentConversationMetadata()
     const submitMessage = useAgentApiSendMessage(chatId)
+    
     useAgentApiSubscribeConversation(chatId)
 
     //@ts-nocheck

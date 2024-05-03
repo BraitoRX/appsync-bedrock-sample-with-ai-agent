@@ -8,6 +8,7 @@ let envVariables = ''
 for (const key in parsedArtifacts) {
 	envVariables += `REACT_APP_${key.toUpperCase()}=${parsedArtifacts[key]}\n`
 }
+console.log(envVariables)
 
 fs.writeFileSync('./.env.development.local', envVariables)
 

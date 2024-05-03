@@ -45,10 +45,13 @@ root.render(
             <Route path="/configuration/agent/:agentId" element={<ConfigurationViewAgent />} />
             <Route path="/configuration/action/:actionId" element={<ConfigurationViewAction />} />
           </Route>
+          
+          
           <Route path="/chat" element={<AIAgentSidebar />} >
             <Route path="/chat/new" element={<AIAgentNewChat />} />
             <Route path="/chat/view/:chatId" element={<AIAgentViewChat />} />
           </Route>
+
           <Route path="/" element={<Navigate to="/chat" replace/>} />
         </Routes>
       </PageWrapper>

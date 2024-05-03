@@ -51,6 +51,8 @@ export function ChatRendered () {
 
     events.forEach((event, index) => {
 
+
+
         if (new Date(event.timestamp).getTime() > lastEffectEndTime) {
             lastEffectEndTime = new Date(event.timestamp).getTime()
         }
@@ -64,6 +66,7 @@ export function ChatRendered () {
             }
 
             if (event.event.message) {
+                
                 renderedChat.push(
                     <UserChatMessage
                         text={event.event.message}
@@ -158,7 +161,6 @@ export function ChatRendered () {
             }
             
         }
-
         // Compute delay for typing effect
         lastEffectEndTime += messageSize * 5
     })

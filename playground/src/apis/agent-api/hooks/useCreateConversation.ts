@@ -21,9 +21,11 @@ export function useAgentApiCreateConversation () {
     const setConversationsValue = useSetRecoilState(Conversations)
 
     return (agent: string) => {
+        
         return createConversationQuery.invoke({config: {agent}})
             .then(c => {
                 setConversationsValue(Loadable.unloaded())
+                console.log('Created conversation', c)
                 return c
             })
     }

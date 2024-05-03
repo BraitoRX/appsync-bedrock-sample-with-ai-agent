@@ -18,7 +18,11 @@ export const fmHandlerArns = [
 	{
 		label: 'agent',
 		name: process.env.REACT_APP_HANDLERCLAUDEAGENT,
-	}	
+	},
+	{
+		label: 'test',
+		name: process.env.REACT_APP_HANDLERTESTAGENT,
+	},
 ]
 
 

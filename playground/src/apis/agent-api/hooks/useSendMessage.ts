@@ -2,6 +2,7 @@ import { useSetRecoilState } from "recoil"
 import { GraphqlQuery, Invoke } from "../../invoker"
 import { ConversationEvents, Loadable } from "../state"
 import { ConversationEvent } from "../types"
+import { Console } from "console"
 
 interface SendMessageResult {
     userPublishMessage: ConversationEvent
@@ -29,9 +30,12 @@ export function useAgentApiSendMessage (cid: string = '') {
     const setConversationEvents = useSetRecoilState(ConversationEvents)
 
     return async (event: any) => {
+        
         sendConversationMessageQuery.invoke({cid, event})
             .then(result => {
                 setConversationEvents((data) => {
+                    console.log('data', data)
+                    console.log('cid', cid)
 
                     let targetConversationEvents = data[cid]
                     if (!targetConversationEvents || targetConversationEvents.loading !== 'loaded'){

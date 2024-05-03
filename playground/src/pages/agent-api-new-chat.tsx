@@ -7,9 +7,14 @@ import { Container } from '../library/container';
 
 export function AIAgentNewChat () {
     
+    // Carga la lista de agentes
     const agentListObject = useAgentApiAgentList()
+
+    // Estado del agente seleccionado
     const [selectedAgent, setSelectedAgent] = useState<string>('')
+    // Función para crear una conversación, asigna un ID único a la conversación.
     const createConversation = useAgentApiCreateConversation()
+
     const nav = useNavigate()
 
     if (agentListObject.isUnloaded() || !agentListObject.value) {
