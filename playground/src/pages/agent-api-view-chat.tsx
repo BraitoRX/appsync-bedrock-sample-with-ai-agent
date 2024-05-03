@@ -14,7 +14,7 @@ export function AIAgentViewChat () {
     
     const {chatId} = useParams()
     
-    const selectedLlm = useRecoilValue(selectedLlmState);
+    const selectedLlm = useRecoilValue(selectedLlmState)
 
 
     const conversationObject = useAgentApiConversation(chatId)
@@ -57,7 +57,7 @@ export function AIAgentViewChat () {
                             placeholder="Type your message here"
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
-                                    submitMessage({message: chatString})
+                                    submitMessage({message: chatString, model: selectedLlm})
                                     setChatString('')
                                     e.preventDefault()
                                 }

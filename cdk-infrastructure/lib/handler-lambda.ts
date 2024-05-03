@@ -42,7 +42,8 @@ export function buildFoundationModelHandler(scope: Construct, props: FoundationM
                     new iam.PolicyStatement({
                         actions: [
                             'bedrock:InvokeModel',
-                            'bedrock:InvokeModelWithResponseStream'
+                            'bedrock:InvokeModelWithResponseStream',
+                            'bedrock:Retrieve'
                         ],
                         resources: ['*']
                     })
@@ -50,6 +51,8 @@ export function buildFoundationModelHandler(scope: Construct, props: FoundationM
             })
         }
     })
+
+
 
     // Build function with docker
     const lambdaFunction = new lambda.DockerImageFunction(scope, "AppsyncAgentFunction-" + props.lambdaPath, {

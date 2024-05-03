@@ -48,7 +48,8 @@ export function ChatRendered () {
     let lastSection = ''
     let renderedChat: ReactNode[] = []
     let lastEffectEndTime = + new Date(events[0]?.timestamp);
-
+    let message_full = ''
+    
     events.forEach((event, index) => {
 
 
@@ -95,11 +96,15 @@ export function ChatRendered () {
                 lastSection = 'agent'
                 renderedChat.push(<EnterAgentSection name={agentObject.value?.name} key={index}/>)
             }
-
+             
             if (event.event.message) {
+
                 // split on ``` for rendering blobs
                 let parts = event.event.message.split('```')
                 let localLastEffectTime = lastEffectEndTime
+                message_full+=event.event.message
+                console.log(message_full)
+                
                 parts.forEach((part: string, index: number) => {
                     if (index % 2 === 0) {
                         renderedChat.push(
@@ -163,6 +168,7 @@ export function ChatRendered () {
         }
         // Compute delay for typing effect
         lastEffectEndTime += messageSize * 5
+
     })
 
     if (conversationMetadata.partialMessage) {
