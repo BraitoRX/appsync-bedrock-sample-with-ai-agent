@@ -32,13 +32,7 @@ def bedrockS(prompt, question, modelId="anthropic.claude-v2"):
     #     contador += 1
 
     system_prompt = "Eres un agente de inteligencia artificial muy especializado en la arquitectura de software, mejor dicho un experto en la materia por lo que solo debes responder preguntas relacionadas a ello."
-    prompt = f"""
-<|begin_of_text|><|start_header_id|>system<|end_header_id|>
-
-{ system_prompt }<|eot_id|><|start_header_id|>user<|end_header_id|>
-
-{ question }<|eot_id|><|start_header_id|>assistant<|end_header_id|>
-    """
+    prompt = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n{ system_prompt }<|eot_id|><|start_header_id|>user<|end_header_id|>\n{ question }<|eot_id|><|start_header_id|>assistant<|end_header_id|>"""
 
     response = bedrock.invoke_model(
         body=json.dumps(
@@ -55,6 +49,8 @@ def bedrockS(prompt, question, modelId="anthropic.claude-v2"):
     raw_body = response["body"].read().decode("utf-8")
     response_json = json.loads(raw_body)
 
+    print(response_json)
+
     return [*response_json.values()][0]
 
 
@@ -62,7 +58,6 @@ def handler(event, context):
 
     chatResponder = ChatResponder(event["conversationData"]["id"])
     try:
-        # Forward to anthropic
         response = bedrockS(
             event["chatString"],
             event["userInput"]["message"],

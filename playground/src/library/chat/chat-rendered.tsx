@@ -7,6 +7,7 @@ import {  Flex, Loader, Text, View, useTheme } from "@aws-amplify/ui-react";
 import { AgentChatMessage, AgentGraphQLBlock, AgentInnerDialogBlock, AgentJSONBlock, AgentPartialChatMessage, GraphQLResultBlock, UserChatMessage } from "./chat-items";
 import reactUseCookie from "react-use-cookie";
 import { useAgentConversationMetadata } from "../../apis/agent-api/hooks/useMetadata";
+import ReactMarkdown from 'react-markdown';
 
 function EnterUserSection () {
     const { tokens } = useTheme();
@@ -48,7 +49,6 @@ export function ChatRendered () {
     let lastSection = ''
     let renderedChat: ReactNode[] = []
     let lastEffectEndTime = + new Date(events[0]?.timestamp);
-    let message_full = ''
     
     events.forEach((event, index) => {
 
@@ -99,36 +99,33 @@ export function ChatRendered () {
              
             if (event.event.message) {
 
-                // split on ``` for rendering blobs
-                let parts = event.event.message.split('```')
-                let localLastEffectTime = lastEffectEndTime
-                message_full+=event.event.message
-                console.log(message_full)
                 
-                parts.forEach((part: string, index: number) => {
-                    if (index % 2 === 0) {
+                let parts = event.event.message.split('```');
+                let localLastEffectTime = lastEffectEndTime;
+
+                // Alternar entre renderizar texto normal y bloques de código
+                parts.forEach((part, idx) => {
+                    const isCodeBlock = idx % 2 !== 0; // índices impares son bloques de código
+                    const key = `${event.id}-${idx}`;
+
+                    if (isCodeBlock) {
+                        renderedChat.push(
+                            <div key={key} style={{ backgroundColor: "#f5f5f5", padding: "10px" }}>
+                                <ReactMarkdown>{`\`\`\`${part}\`\`\``}</ReactMarkdown>
+                            </div>
+                        );
+                    } else {
                         renderedChat.push(
                             <AgentChatMessage 
                                 text={part}
-                                event={event} 
+                                event={event}
                                 lastEventTime={localLastEffectTime}
-                                key={event.id + index}
+                                key={key}
                             />
-                        )
-                        localLastEffectTime += part.length * 5
-                        messageSize += part.length
+                        );
                     }
-                    else {
-                        renderedChat.push(
-                            <AgentJSONBlock 
-                                text={part}
-                                event={event} 
-                                lastEventTime={localLastEffectTime}
-                                key={event.id + index}
-                            />
-                        )
-                    }
-                })
+                });
+               
             }
 
             else if (event.event.actionRequested) {
